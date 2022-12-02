@@ -10,20 +10,22 @@ import SwiftUI
 struct GameDet: View {
     var topColor:Color = .black
     var bottomColor:Color = .purple
-    var selectedGame:GameData
+    @State private var errorMessage = ""
+    @StateObject private var gameListModel:GameListModel = GameListModel()
+    var id:Int
     var body: some View {
         GeometryReader{ proxy in
             ZStack{
                 LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
                 ScrollView{
                     VStack{
-                        Text(selectedGame.name)
+                        Text(gameListModel.selectedGame.name)
                             .font(.system(size: 32))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,alignment: .leading)
                             .padding(.all,20)
-                        AsyncImage(url: URL.finalImageUrl(imageurl: selectedGame.background_image)) { phase in
+                        AsyncImage(url: URL.finalImageUrl(imageurl: gameListModel.selectedGame.background_image)) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -47,14 +49,22 @@ struct GameDet: View {
                             }
                                 
                             
-                            PlatformStack(arr: selectedGame.platforms, type: "Platforms")
+                            PlatformStack(arr: gameListModel.selectedGame.platforms, type: "Platforms")
                             
                             
                             Spacer()
                         }
-                    }.task {
-                       
                     }
+                        .task{
+                            do{
+                                try await gameListModel.fetchGameDetails(id: id)
+                                
+                            }
+                            catch{
+                                errorMessage = error.localizedDescription
+                            }
+                        }
+                    
                 }
             }
         }
@@ -63,7 +73,7 @@ struct GameDet: View {
 
 struct GameDet_Previews: PreviewProvider {
     static var previews: some View {
-        GameDet(selectedGame: mockData())
+        GameDet(id: 3498)
     }
 }
 struct PlatformStack: View{

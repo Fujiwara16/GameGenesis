@@ -12,24 +12,24 @@ import Foundation
 class GameListModel: ObservableObject {
     let client = GameDataHttpClient()
     
-    @Published var action:Array<GameData> = []
-    @Published var indie:Array<GameData> = []
-    @Published var adventure:Array<GameData> = []
-    @Published var rpg:Array<GameData> = []
-    @Published var strategy:Array<GameData> = []
-    @Published var shooter:Array<GameData> = []
-    @Published var casual:Array<GameData> = []
-    @Published var simulation:Array<GameData> = []
-    @Published var puzzle:Array<GameData> = []
-    @Published var arcade:Array<GameData> = []
-    @Published var platformer:Array<GameData> = []
-    @Published var racing:Array<GameData> = []
-    @Published var sports:Array<GameData> = []
-    @Published var fighting:Array<GameData> = []
-    @Published var educational:Array<GameData> = []
-    @Published var card:Array<GameData> = []
-    @Published var family:Array<GameData> = []
-    
+    @Published var action:Array<InitialGameDetails> = []
+    @Published var indie:Array<InitialGameDetails> = []
+    @Published var adventure:Array<InitialGameDetails> = []
+    @Published var rpg:Array<InitialGameDetails> = []
+    @Published var strategy:Array<InitialGameDetails> = []
+    @Published var shooter:Array<InitialGameDetails> = []
+    @Published var casual:Array<InitialGameDetails> = []
+    @Published var simulation:Array<InitialGameDetails> = []
+    @Published var puzzle:Array<InitialGameDetails> = []
+    @Published var arcade:Array<InitialGameDetails> = []
+    @Published var platformer:Array<InitialGameDetails> = []
+    @Published var racing:Array<InitialGameDetails> = []
+    @Published var sports:Array<InitialGameDetails> = []
+    @Published var fighting:Array<InitialGameDetails> = []
+    @Published var educational:Array<InitialGameDetails> = []
+    @Published var card:Array<InitialGameDetails> = []
+    @Published var family:Array<InitialGameDetails> = []
+    @Published var selectedGame:GameData = mockData()
     
     
     func fetchGameList(page:Int) async throws {
@@ -50,6 +50,10 @@ class GameListModel: ObservableObject {
         educational = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "educational"))
         card = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "card"))
         family = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "family"))
+    }
+    
+    func fetchGameDetails(id:Int)async throws{
+        selectedGame = try await client.getGameDetails(url: URL.finalDetURL(id: "\(id)"))
     }
     
 }

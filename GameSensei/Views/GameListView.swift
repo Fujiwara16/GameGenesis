@@ -10,7 +10,7 @@ import SwiftUI
 struct GameListView: View {
     @StateObject private var gameListModel:GameListModel = GameListModel()
     @State private var errorMessage = ""
-    @State private var currentIndex = 0
+ 
     private var topColor:Color = .black
     private var bottomColor:Color = .purple
     private var page:Int = 1
@@ -34,7 +34,6 @@ struct GameListView: View {
                     VStack(spacing:40){
                         
                         GenreStack(arr:gameListModel.action,genre: "Action")
-                        
                         GenreStack(arr:gameListModel.indie,genre: "Indie")
                         GenreStack(arr:gameListModel.adventure,genre: "Adventure")
                         GenreStack(arr:gameListModel.strategy,genre: "Strategy")
@@ -104,9 +103,9 @@ func doAction() {
 }
 
 struct GenreStack: View{
-     var arr:Array<GameData>
+     var arr:Array<InitialGameDetails>
      var genre:String
-    @State var selectedGame:GameData?
+    @State private var selectedGame:InitialGameDetails?
     var body:some View{
         GeometryReader{
             proxy in
@@ -162,7 +161,7 @@ struct GenreStack: View{
             }
         }.frame(height: 300)
             .sheet(item: $selectedGame){selectedGame in
-                GameDet(selectedGame:selectedGame)
+                GameDet(id:selectedGame.id)
             }
     }
 }

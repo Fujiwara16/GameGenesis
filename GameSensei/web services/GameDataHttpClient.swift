@@ -18,7 +18,7 @@ enum NetworkError: Error{
 }
 
 class GameDataHttpClient{
-    func getGameList(url:URL)async throws->[GameData]{
+    func getGameList(url:URL)async throws->[InitialGameDetails]{
         let (data,response) = try await URLSession.shared.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
@@ -28,29 +28,43 @@ class GameDataHttpClient{
         guard let jsonData = try? JSON(data: data) else{
             throw NetworkError.decodingError
         }
+      
         let results = jsonData["results"]
-        var gameData:Array<GameData> = []
+        var gameData:Array<InitialGameDetails> = []
         for result in results {
-            var platforms:Array<Platforms> = []
-            var genre:Array<Genres> = []
-            var stores:Array<Store> = []
-            print(result.1)
-            for platform in result.1["platforms"]{
-                //                print(platform.1)
-                platforms.append(Platforms(name: platform.1["platform"]["name"].stringValue
-                                           
-                                          ))
-            }
-            for item in result.1["genres"]{
-                genre.append(Genres(name: item.1["name"]["name"].stringValue
-                                   ))
-            }
-            for item in result.1["stores"]{
-                stores.append(Store(name: item.1["store"]["name"]["name"].stringValue
-                                   ))
-            }
-            gameData.append(GameData(id: result.1["id"].intValue, name: result.1["name"].stringValue, background_image: result.1["background_image"].stringValue, released: result.1["released"].stringValue, rating: result.1["rating"].doubleValue,platforms: platforms,genre: genre,stores: stores))
+            gameData.append(InitialGameDetails(id: result.1["id"].intValue, name: result.1["name"].stringValue, background_image: result.1["background_image"].stringValue))
         }
+        
+        return gameData
+    }
+    
+    func getGameDetails(url:URL)async throws->GameData{
+        let (data,response) = try await URLSession.shared.data(from: url)
+        print(url)
+        guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
+            throw NetworkError.invalidResponse
+        }
+        
+        guard let jsonData = try? JSON(data: data) else{
+            throw NetworkError.decodingError
+        }
+        
+        var gameData:GameData = mockData()
+//        if(results == nil) return gameData
+        
+        
+      
+        
+        
+        var platforms:Array<Platforms> = []
+        var genre:Array<Genres> = []
+        var stores:Array<Store> = []
+        for result in jsonData["platforms"] {
+            platforms.append(Platforms(name: result.1["platform"]["name"].stringValue, image_background: result.1["platform"]["image_background"].stringValue, minimum: result.1["requirements"]["minimum"].stringValue, recommended:  result.1["requirements"]["recommended"].stringValue))
+            
+        }
+           
+        gameData = GameData(id: jsonData["id"].intValue, name: jsonData["name"].stringValue, background_image: jsonData["background_image"].stringValue, released: jsonData["released"].stringValue, rating: jsonData["rating"].doubleValue,description:jsonData["description_raw"].stringValue,platforms: platforms,genre: genre,stores: stores)
         
         return gameData
     }
