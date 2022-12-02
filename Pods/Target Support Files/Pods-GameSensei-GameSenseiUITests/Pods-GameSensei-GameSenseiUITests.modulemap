@@ -1,0 +1,6 @@
+framework module Pods_GameSensei_GameSenseiUITests {
+  umbrella header "Pods-GameSensei-GameSenseiUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
