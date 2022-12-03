@@ -50,21 +50,30 @@ class GameDataHttpClient{
         }
         
         var gameData:GameData = mockData()
-//        if(results == nil) return gameData
-        
-        
-      
-        
         
         var platforms:Array<Platforms> = []
         var genre:Array<Genres> = []
         var stores:Array<Store> = []
+        var tags:Array<Tags> = []
+        var publisher:Array<Publisher> = []
+        for result in jsonData["tags"]{
+            tags.append(Tags(tags: result.1["name"].stringValue))
+        }
+        for result in jsonData["stores"] {
+            stores.append(Store(name: result.1["store"]["name"].stringValue))
+        }
+        for result in jsonData["genres"]{
+            genre.append(Genres(name: result.1["name"].stringValue))
+        }
+        for result in jsonData["publishers"] {
+            publisher.append(Publisher(publisher: result.1["name"].stringValue))
+        }
         for result in jsonData["platforms"] {
             platforms.append(Platforms(name: result.1["platform"]["name"].stringValue, image_background: result.1["platform"]["image_background"].stringValue, minimum: result.1["requirements"]["minimum"].stringValue, recommended:  result.1["requirements"]["recommended"].stringValue))
-            
+                
         }
            
-        gameData = GameData(id: jsonData["id"].intValue, name: jsonData["name"].stringValue, background_image: jsonData["background_image"].stringValue, released: jsonData["released"].stringValue, rating: jsonData["rating"].doubleValue,description:jsonData["description_raw"].stringValue,platforms: platforms,genre: genre,stores: stores)
+        gameData = GameData(id: jsonData["id"].intValue, name: jsonData["name"].stringValue, background_image: jsonData["background_image"].stringValue, released: jsonData["released"].stringValue, rating: jsonData["rating"].doubleValue,description:jsonData["description_raw"].stringValue,platforms: platforms,genre: genre,stores: stores,tags:tags,publisher:publisher)
         
         return gameData
     }

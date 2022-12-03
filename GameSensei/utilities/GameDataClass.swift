@@ -24,6 +24,8 @@ struct GameData:Identifiable,Decodable{
     var platforms:Array<Platforms>
     var genre:Array<Genres>
     var stores:Array<Store>
+    var tags:Array<Tags>
+    var publisher:Array<Publisher>
 }
 struct Genres:Decodable,Identifiable{
     var id:UUID = UUID()
@@ -33,7 +35,15 @@ struct Genres:Decodable,Identifiable{
 struct Store:Decodable,Identifiable{
     var id:UUID = UUID()
     var name:String
-
+   
+}
+struct Publisher:Decodable,Identifiable{
+    var id:UUID = UUID()
+    var publisher:String
+}
+struct Tags:Decodable,Identifiable{
+    var id:UUID = UUID()
+    var tags:String
 }
 struct Platforms:Decodable,Identifiable {
     var id:UUID = UUID()
@@ -44,6 +54,7 @@ struct Platforms:Decodable,Identifiable {
 
 }
 func mockData()->GameData{
-    let mock:GameData = GameData(id: 1, name: "", background_image: "https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg", released: "", rating: 0.0, description:"" ,platforms: Array<Platforms>(),genre: Array<Genres>(), stores:Array<Store>())
+    let mock:GameData = GameData(id: 1, name: "", background_image: "https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg", released: "", rating: 0.0, description:"" ,platforms: Array<Platforms>(),genre: Array<Genres>(), stores:Array<Store>(),tags: Array<Tags>(),publisher: Array<Publisher>())
     return mock
 }
+

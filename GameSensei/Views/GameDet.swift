@@ -26,6 +26,11 @@ struct GameDet: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,alignment: .leading)
                             .padding(.all,20)
+                        Text("Release: \(gameListModel.selectedGame.released)")
+                            .font(.subheadline)
+                            .padding(.leading,20)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity,alignment: .leading)
                         AsyncImage(url: URL.finalImageUrl(imageurl: imageurl)) { phase in
                             switch phase {
                             case .success(let image):
@@ -48,15 +53,27 @@ struct GameDet: View {
                             @unknown default:
                                 fatalError()
                             }
-                            GenresData(arr: gameListModel.selectedGame.genre,type: "Genres", width: proxy.size.width)
+                            
+                            
+                        }.padding(.bottom,19)
+                        
+                        VStack{
+                            Tag(arr: gameListModel.selectedGame.tags,type: "Tags", width: proxy.size.width)
+                            Publishers(arr: gameListModel.selectedGame.publisher,type: "Publishers", width: proxy.size.width)
+                            Description(selectedGame:gameListModel.selectedGame,type:"Description",width:proxy.size.width)
+                        GenresData(arr: gameListModel.selectedGame.genre,type: "Genres", width: proxy.size.width)
+                            
+                        StoreStack(arr: gameListModel.selectedGame.stores,type: "Stores", width: proxy.size.width)
+                           
+                        PlatformStack(arr: gameListModel.selectedGame.platforms,type: "Platforms", width: proxy.size.width)
+                            
+                            }.frame(width:proxy.size.width-40,alignment: .center)
+                                .padding(.all,10)
+                                .background(Color("barTintcolor"))
+                                .cornerRadius(10)
+                                .opacity(gameListModel.selectedGame.description.isEmpty ? 0 : 1)
+                                .shadow(radius: 10)
                                 
-                            StoreStack(arr: gameListModel.selectedGame.stores,type: "Stores", width: proxy.size.width)
-                               
-                            PlatformStack(arr: gameListModel.selectedGame.platforms,type: "Platforms", width: proxy.size.width)
-                                
-                                
-                            Text("\n")
-                        }
                     }
                         .task{
                             do{
@@ -80,9 +97,45 @@ struct GameDet_Previews: PreviewProvider {
         GameDet(imageurl: "https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg", id: 3498)
     }
 }
+struct Description:View{
+    var selectedGame:GameData
+    var type:String
+    var width:CGFloat
+    var body:some View{
+        VStack(alignment:.leading){
+            Text(type)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.leading,10)
+            HStack{
+                Text("Rating: \(selectedGame.rating)")
+                    .font(.subheadline)
+                    .padding(.leading,10)
+                    .foregroundColor(.yellow)
+                    .frame(alignment: .leading)
+                    
+                Image(systemName: "star.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 15)
+            }
+                
+            Text(selectedGame.description)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .lineLimit(1000)
+                .foregroundColor(.white)
+                
+                .frame(width:width-40,alignment: .center)
+                .padding(.all,10)
+                
+        }.opacity(selectedGame.description.isEmpty ? 0 : 1)
+    }}
+
 struct PlatformStack: View{
     var arr:Array<Platforms>
-     var type:String
+    var type:String
     var width:Double
     var body:some View{
         VStack(alignment:.leading){
@@ -90,49 +143,68 @@ struct PlatformStack: View{
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.leading,20)
             
-           
-            VStack(alignment: .center, spacing: 10) {
-                ForEach(arr){ item in
-                        VStack{
-                          
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack(alignment: .center, spacing: 10) {
+                    ForEach(arr){ item in
+                        
+                        
+                        Text(item.name)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .lineLimit(0)
+                            .foregroundColor(.white)
+                            .padding(.all,10)
+                            .background(Color.black)
+                            .cornerRadius(10)
+
+                    }
+                }
+                
+            } .padding(.bottom,10)
+            VStack(spacing: 10) {
+                ForEach(arr,id: \.id){ item in
+                    if(!item.minimum.isEmpty){
+                        VStack(alignment:.leading){
+                            
                             Text(item.name)
-                                .font(.subheadline)
+                                .font(.headline)
                                 .fontWeight(.bold)
-                                .lineLimit(0)
+                                .lineLimit(2)
                                 .foregroundColor(.white)
                                 .padding(.bottom,15)
+                            
                             Text(item.minimum)
                                 .font(.subheadline)
-                                .fontWeight(.bold)
+                                .fontWeight(.medium)
                                 .lineLimit(1000)
                                 .foregroundColor(.white)
                                 .padding(.bottom,15)
                             Text(item.recommended)
                                 .font(.subheadline)
                                 .lineLimit(1000)
-                                .fontWeight(.bold)
+                                .fontWeight(.medium)
                                 .foregroundColor(.white)
                                 .padding(.bottom,15)
                             
                         }
-                        
                     }
+                   
+                    
+                }
             }
-            .frame(width:width-40,alignment: .center)
-                .padding(.all,10)
-                .background(Color.black)
-                .cornerRadius(10)
             
+        }.frame(width:width-40,alignment: .leading)
+            .padding(.all,10)
+            .opacity(arr.isEmpty ? 0 : 1)
+            .cornerRadius(10)
+            .shadow(radius: 10)
         
-        }
-         
     }
 }
 struct GenresData: View{
     var arr:Array<Genres>
-     var type:String
+    var type:String
     var width:CGFloat
     var body:some View{
         VStack(alignment:.leading){
@@ -140,36 +212,38 @@ struct GenresData: View{
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.leading,20)
             
-           
-            VStack(alignment: .center, spacing: 10) {
-                ForEach(arr){ item in
-                        VStack{
-                          
-                            Text(item.name)
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .lineLimit(0)
-                                .foregroundColor(.white)
-                                .padding(.bottom,15)
-                          
-                        }
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack(alignment: .center, spacing: 10) {
+                    ForEach(arr){ item in
+                        
+                        
+                        Text(item.name)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .lineLimit(0)
+                            .foregroundColor(.white)
+                            .padding(.all,10)
+                            .background(Color.black)
+                            .cornerRadius(10)
+                        
                         
                     }
+                }
+                
             }
-            .frame(width:width-40,alignment: .center)
-                .padding(.all,10)
-                .background(Color.black)
-                .cornerRadius(10)
             
-        
-        }
+            
+            
+            
+            
+        }.frame(width:width-40,alignment: .leading)
+            .padding(.bottom,10).opacity(arr.isEmpty ? 0 : 1)
     }
 }
 struct StoreStack: View{
     var arr:Array<Store>
-     var type:String
+    var type:String
     var width:CGFloat
     var body:some View{
         VStack(alignment:.leading){
@@ -177,42 +251,98 @@ struct StoreStack: View{
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.leading,20)
             
-           
-            VStack(alignment: .center, spacing: 10) {
-                ForEach(arr){ item in
-                        VStack{
-                          
-                            Text(item.name)
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .lineLimit(0)
-                                .foregroundColor(.white)
-                                .padding(.bottom,15)
-                         
-                        }
+            
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack(alignment: .center, spacing: 10) {
+                    ForEach(arr){ item in
                         
-                    }
-            }
-            .frame(width:width-40,alignment: .center)
-                .padding(.all,10)
-                .background(Color.black)
-                .cornerRadius(10)
-            
-        
-        }
+                        
+                        Text(item.name)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .lineLimit(0)
+                            .foregroundColor(.white)
+                            .padding(.all,10)
+                            .background(Color.black)
+                            .cornerRadius(10)
 
+                    }
+                }
+                
+            }
+            
+        }.frame(width:width-40,alignment: .leading)
+            .padding(.bottom,10).opacity(arr.isEmpty ? 0 : 1)
     }
 }
-//struct DisplayData:View{
-//    var url:String
-//    var name:String
-//    var width:CGFloat
-//    var minimum:String
-//    var recommended:String
-//    var body:some View{
-//
-//
-//    }
-//}
+struct Tag:View{
+    var arr:Array<Tags>
+    var type:String
+    var width:CGFloat
+    var body:some View{
+        VStack(alignment:.leading){
+            Text(type)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+            
+            
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack(alignment: .center, spacing: 10) {
+                    ForEach(arr){ item in
+                        
+                        
+                        Text(item.tags)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .lineLimit(0)
+                            .foregroundColor(.white)
+                            .padding(.all,10)
+                            .background(Color.black)
+                            .cornerRadius(10)
+
+                    }
+                }
+                
+            }
+            
+        }.frame(width:width-40,alignment: .leading)
+            .padding(.bottom,10).opacity(arr.isEmpty ? 0 : 1)
+    }
+}
+struct Publishers:View{
+    var arr:Array<Publisher>
+    var type:String
+    var width:CGFloat
+    var body:some View{
+        VStack(alignment:.leading){
+            Text(type)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+            
+            
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack(alignment: .center, spacing: 10) {
+                    ForEach(arr){ item in
+                        
+                        
+                        Text(item.publisher)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .lineLimit(0)
+                            .foregroundColor(.white)
+                            .padding(.all,10)
+                            .background(Color.black)
+                            .cornerRadius(10)
+
+                    }
+                }
+                
+            }
+            
+        }.frame(width:width-40,alignment: .leading)
+            .padding(.bottom,10).opacity(arr.isEmpty ? 0 : 1)
+    }
+}
