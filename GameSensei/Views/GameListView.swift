@@ -161,7 +161,7 @@ struct GenreStack: View{
             }
         }.frame(height: 300)
             .sheet(item: $selectedGame){selectedGame in
-                GameDet(id:selectedGame.id)
+                GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
             }
     }
 }

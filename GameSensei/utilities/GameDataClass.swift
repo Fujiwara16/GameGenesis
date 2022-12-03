@@ -28,13 +28,11 @@ struct GameData:Identifiable,Decodable{
 struct Genres:Decodable,Identifiable{
     var id:UUID = UUID()
     var name:String
-    var image_background:String
  
 }
 struct Store:Decodable,Identifiable{
     var id:UUID = UUID()
     var name:String
-    var image_background:String
 
 }
 struct Platforms:Decodable,Identifiable {
