@@ -11,7 +11,7 @@ import SwiftUI
 struct GameSenseiApp: App {
     var body: some Scene {
         WindowGroup {
-            GameListView()
+            MainPageView()
         }
     }
 }

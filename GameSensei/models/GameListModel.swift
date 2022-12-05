@@ -5,7 +5,6 @@
 //  Created by Nij Mehar on 01/12/22.
 //
 
-import Foundation
 
 import Foundation
 @MainActor
@@ -30,7 +29,7 @@ class GameListModel: ObservableObject {
     @Published var card:Array<InitialGameDetails> = []
     @Published var family:Array<InitialGameDetails> = []
     @Published var selectedGame:GameData = mockData()
-    
+    @Published var selectedTag:String = "genreView"
     
     func fetchGameList(page:Int) async throws {
         action = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "action"))

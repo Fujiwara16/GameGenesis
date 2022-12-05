@@ -60,15 +60,22 @@ extension URL {
         ) else { return URL(string:"https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg")!}
         print(url)
         return url
-//
-//        var components = URLComponents(
-//            url: url,
-//            resolvingAgainstBaseURL: true
-//        )!
-//        components.queryItems = [
-//            URLQueryItem(name: "key", value: URL.apikey),
-//        ]
-//        return URL(string:components.string!)!
+
+    }
+    static func finalGameSearchUrl(searchText:String)->URL{
+        let url = URL(
+            string: "/api/games",
+            relativeTo: URL.default
+        )!
+        var components = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: true
+        )!
+        components.queryItems = [
+            URLQueryItem(name: "key", value: URL.apikey),
+            URLQueryItem(name: "search", value: searchText)
+        ]
+        return URL(string: components.string!)!
     }
     
 }

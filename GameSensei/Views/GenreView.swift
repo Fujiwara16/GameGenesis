@@ -1,31 +1,19 @@
 //
-//  ContentView.swift
+//  GenreView.swift
 //  GameSensei
 //
-//  Created by Nij Mehar on 01/12/22.
+//  Created by Nij Mehar on 05/12/22.
 //
 
 import SwiftUI
 
-struct GameListView: View {
-    @StateObject private var gameListModel:GameListModel = GameListModel()
-    @State private var errorMessage = ""
-    private var topColor:Color = .black
-    private var bottomColor:Color = .purple
-    private var page:Int = 1
-    @State private var searchText = ""
-    @Environment(\.isSearching) private var isSearching
- 
-    
-    init() {
-            //Use this if NavigationBarTitle is with Large Font
-            UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        UINavigationBar.appearance().barTintColor = .black
-        
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
-        }
-    
-    var body: some View {
+struct GenreView: View {
+    @StateObject var gameListModel:GameListModel
+    @State  var errorMessage = ""
+    var topColor:Color = .black
+    var bottomColor:Color = .purple
+    var page:Int = 1
+    var body:some View{
         NavigationView{
             ZStack{
                 LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
@@ -49,10 +37,9 @@ struct GameListView: View {
                         }
                         
                     }
-                }
+            }
             }
                 .navigationTitle(Text("Games"))
-                .searchable(text: $searchText)
         }
         .task{
             do{
@@ -62,14 +49,17 @@ struct GameListView: View {
                 errorMessage = error.localizedDescription
             }
         }
+       
+   
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct GenreView_Previews: PreviewProvider {
     static var previews: some View {
-        GameListView()
+        GenreView(gameListModel: GameListModel())
     }
 }
+
 struct SearchButton: View {
 @State private var showModal = false
 var body: some View {
@@ -104,7 +94,7 @@ struct GenreStack: View{
                     .padding(.leading,20)
                 
                 ScrollView(.horizontal,showsIndicators: false) {
-                    LazyHStack {
+                    LazyHStack(spacing:10) {
                         ForEach(arr){ item in
                             VStack{
                                     AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image)) { phase in
@@ -113,36 +103,31 @@ struct GenreStack: View{
                                             image
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
-                                                .frame(width:proxy.size.width - 30,height: 200)
+                                                .frame(width:proxy.size.width - 150,height: 200)
                                                 .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
                                                 .shadow(radius: 20)
-                                        case .failure(let error):
-                                            Image(systemName: "person.crop.circle.badge.exclamationmark")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width:proxy.size.width - 50,height: 200)
-                                                .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
-                                            let _ = print(error)
-                                            Text("error: \(error.localizedDescription)")
+                                        case .failure(_):
+                                            ProgressView().foregroundColor(.white)
                                         case .empty:
                                             ProgressView().foregroundColor(.white)
                                         @unknown default:
                                             fatalError()
                                         }
-                                    }.onTapGesture {
-                                        selectedGame = item
                                     }
                                 Text(item.name)
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                 
-                            }.frame(width:proxy.size.width)
+                            }.frame(width:proxy.size.width - 130)
+                                .onTapGesture {
+                                    selectedGame = item
+                                }
                         }
                     }
-                }.frame(height:300)
+                }.frame(height:250)
             }
-        }.frame(height: 300)
+        }.frame(height: 260)
             .sheet(item: $selectedGame){selectedGame in
                 GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
             }
