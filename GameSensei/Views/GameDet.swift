@@ -53,8 +53,6 @@ struct GameDet: View {
                             @unknown default:
                                 fatalError()
                             }
-                            
-                            
                         }.padding(.bottom,19)
                         
                         VStack{
@@ -78,8 +76,6 @@ struct GameDet: View {
                         .task{
                             do{
                                 try await gameListModel.fetchGameDetails(id: id)
-//                                arr = gameListModel.selectedGame.platforms
-                                
                             }
                             catch{
                                 errorMessage = error.localizedDescription
@@ -147,8 +143,6 @@ struct PlatformStack: View{
             ScrollView(.horizontal,showsIndicators: false){
                 HStack(alignment: .center, spacing: 10) {
                     ForEach(arr){ item in
-                        
-                        
                         Text(item.name)
                             .font(.subheadline)
                             .fontWeight(.bold)
@@ -157,7 +151,6 @@ struct PlatformStack: View{
                             .padding(.all,10)
                             .background(Color.black)
                             .cornerRadius(10)
-
                     }
                 }
                 
@@ -186,11 +179,8 @@ struct PlatformStack: View{
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
                                 .padding(.bottom,15)
-                            
                         }
                     }
-                   
-                    
                 }
             }
             

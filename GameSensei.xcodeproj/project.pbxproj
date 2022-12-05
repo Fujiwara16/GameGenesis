@@ -22,6 +22,7 @@
 		E8206DA42938CCA3000F9D5E /* GameDataHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206DA32938CCA3000F9D5E /* GameDataHttpClient.swift */; };
 		E8206DA62938CD05000F9D5E /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206DA52938CD05000F9D5E /* URLs.swift */; };
 		E8206DA92938CDDB000F9D5E /* GameListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206DA82938CDDB000F9D5E /* GameListModel.swift */; };
+		E8C95E9F293D065E00BEBE03 /* GameDetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C95E9E293D065E00BEBE03 /* GameDetViewModel.swift */; };
 		E8E8E109293A102300334EE9 /* GameDet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E8E108293A102300334EE9 /* GameDet.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		E8206DA32938CCA3000F9D5E /* GameDataHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDataHttpClient.swift; sourceTree = "<group>"; };
 		E8206DA52938CD05000F9D5E /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
 		E8206DA82938CDDB000F9D5E /* GameListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListModel.swift; sourceTree = "<group>"; };
+		E8C95E9E293D065E00BEBE03 /* GameDetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetViewModel.swift; sourceTree = "<group>"; };
 		E8E8E108293A102300334EE9 /* GameDet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDet.swift; sourceTree = "<group>"; };
 		FCBA637DBFEC3A7FE4C2A350 /* Pods-GameSensei.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GameSensei.debug.xcconfig"; path = "Target Support Files/Pods-GameSensei/Pods-GameSensei.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				E8206DA82938CDDB000F9D5E /* GameListModel.swift */,
+				E8C95E9E293D065E00BEBE03 /* GameDetViewModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				E8206D722938C10D000F9D5E /* GameSenseiApp.swift in Sources */,
 				E8206D9C2938C3CE000F9D5E /* SnapCarousel.swift in Sources */,
 				E8E8E109293A102300334EE9 /* GameDet.swift in Sources */,
+				E8C95E9F293D065E00BEBE03 /* GameDetViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

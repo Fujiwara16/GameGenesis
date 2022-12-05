@@ -10,7 +10,6 @@ import SwiftUI
 struct GameListView: View {
     @StateObject private var gameListModel:GameListModel = GameListModel()
     @State private var errorMessage = ""
- 
     private var topColor:Color = .black
     private var bottomColor:Color = .purple
     private var page:Int = 1
@@ -32,7 +31,6 @@ struct GameListView: View {
                 LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
                 ScrollView{
                     VStack(spacing:40){
-                        
                         GenreStack(arr:gameListModel.action,genre: "Action")
                         GenreStack(arr:gameListModel.indie,genre: "Indie")
                         GenreStack(arr:gameListModel.adventure,genre: "Adventure")
@@ -41,7 +39,6 @@ struct GameListView: View {
                         GenreStack(arr:gameListModel.casual,genre: "Casual")
                         GenreStack(arr:gameListModel.simulation,genre: "Simulation")
                         GenreStack(arr:gameListModel.platformer,genre: "Platformer")
-                       
                         VStack(spacing:40){
                             GenreStack(arr:gameListModel.racing,genre: "Racing")
                             GenreStack(arr:gameListModel.sports,genre: "Sports")
@@ -55,16 +52,11 @@ struct GameListView: View {
                 }
             }
                 .navigationTitle(Text("Games"))
-                
                 .searchable(text: $searchText)
-                
-            
         }
-//        .background(Color.black)
         .task{
             do{
                 try await gameListModel.fetchGameList(page:page)
-                
             }
             catch{
                 errorMessage = error.localizedDescription
@@ -83,7 +75,7 @@ struct SearchButton: View {
 var body: some View {
     VStack {
         Button(action: {
-            doAction()
+            
         }) {
             Image(systemName: "magnifyingglass")
                 .resizable()
@@ -91,14 +83,9 @@ var body: some View {
                 .frame(width: 26, height: 26)
                 .padding(EdgeInsets.init(top: 90, leading: 0, bottom: 0, trailing: -10))
                 .foregroundColor(Color.white)
-
         }
     }
     .padding(.horizontal)
-}
-
-func doAction() {
-    
 }
 }
 
@@ -142,7 +129,6 @@ struct GenreStack: View{
                                         @unknown default:
                                             fatalError()
                                         }
-                                    
                                     }.onTapGesture {
                                         selectedGame = item
                                     }
@@ -152,9 +138,6 @@ struct GenreStack: View{
                                     .foregroundColor(.white)
                                 
                             }.frame(width:proxy.size.width)
-                            
-                            
-                            
                         }
                     }
                 }.frame(height:300)
