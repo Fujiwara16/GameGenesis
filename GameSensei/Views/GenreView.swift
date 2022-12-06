@@ -18,7 +18,9 @@ struct GenreView: View {
             ZStack{
                 LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
                 ScrollView{
+                    
                     VStack(spacing:40){
+            
                         GenreStack(arr:gameListModel.action,genre: "Action")
                         GenreStack(arr:gameListModel.indie,genre: "Indie")
                         GenreStack(arr:gameListModel.adventure,genre: "Adventure")
@@ -37,8 +39,20 @@ struct GenreView: View {
                         }
                     }
                 }
-            }
-                .navigationTitle(Text("Genres"))
+                .refreshable {
+                    Task{
+                        do{
+                            gameListModel.page = Int.random(in: 1...40)
+                            try await gameListModel.fetchGameList(page:gameListModel.page)
+                        }
+                        catch{
+                            errorMessage = error.localizedDescription
+                        }
+                        
+                    }
+                }
+            } .navigationTitle(Text("Genres"))
+                
         }.environmentObject(GameListModel())
         .task{
             do{

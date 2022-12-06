@@ -18,8 +18,9 @@ struct GOTYView: View {
                     LinearGradient(colors: [gotyViewModel.topColor,gotyViewModel.bottomColor], startPoint: .top, endPoint: .bottom)
                         .ignoresSafeArea(.all)
                     GridView(width: proxy.size.width, gotyViewModel:gotyViewModel,arr:gotyViewModel.gotyList)
-                        .navigationTitle("Best of the year")
-                }.task {
+                       
+                } .navigationTitle("Best of the year")
+                .task {
                     do{
                         gotyViewModel.page = Int.random(in: 1...20)
                         try await gotyViewModel.fetchGameList(page:gotyViewModel.page)
@@ -86,11 +87,18 @@ struct GridView:View{
                        }
                }
             }.padding(.all,8)
-        }.background(
-            GeometryReader { proxy in
-                Color.clear.onAppear { print(proxy.size.height) }
+        }.refreshable {
+            Task{
+                do{
+                    gotyViewModel.page = Int.random(in: 1...20)
+                    try await gotyViewModel.fetchGameList(page:gotyViewModel.page)
+                }catch{
+                    return
+                }
+                
             }
-        )
+        }
+       
         
         .sheet(item: $selectedGame,onDismiss: didDismiss){selectedGame in
             GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)

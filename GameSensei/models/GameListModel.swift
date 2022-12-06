@@ -35,6 +35,7 @@ class GameListModel: ObservableObject {
     @Published var selectedVideo = mockVideoData()
     @Published var videoUrl:URL?
     @Published var model:AVPlayer?
+//    let queue = DispatchQueue(label: "com.app.concurrentQueue", attributes: .concurrent)
     func fetchGameList(page:Int) async throws {
         action = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "action"))
         indie = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "indie"))

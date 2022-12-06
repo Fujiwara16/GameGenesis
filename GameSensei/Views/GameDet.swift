@@ -11,7 +11,7 @@ struct GameDet: View {
     var topColor:Color = .black
     var bottomColor:Color = .purple
     var imageurl:String
-    @State private var canDismiss = true
+    @State private var canDismiss = false
     @State private var errorMessage = ""
     @EnvironmentObject private var gameListModel:GameListModel
     var id:Int
@@ -83,30 +83,30 @@ struct GameDet: View {
                                 .cornerRadius(10)
                                 .opacity(gameListModel.selectedGame.description.isEmpty ? 0 : 1)
                                 .shadow(radius: 10)
-                                
+                        
                     }
-                        .task{
-                            do{
-                                try await gameListModel.fetchGameDetails(id: id)
+                    .task{
+                        do{
+                            try await gameListModel.fetchGameDetails(id: id)
+                        }
+                        catch{
+                            errorMessage = error.localizedDescription
+                        }
+                    }
+                    .gesture(
+                        DragGesture().onChanged { value in
+                            
+                            print(canDismiss)
+                            if(gameListModel.selectedGame.videoUrl != "" && gameListModel.model!.isPlaying)
+                            {
+                                canDismiss = true
+                                
                             }
-                            catch{
-                                errorMessage = error.localizedDescription
+                            else{
+                                canDismiss = false
                             }
                         }
-                        .gesture(
-                           DragGesture().onChanged { value in
-
-                               print(canDismiss)
-                               if(gameListModel.selectedGame.videoUrl != "" && gameListModel.model!.isPlaying)
-                                    {
-                                        canDismiss = true
-                                    
-                                    }
-                               else{
-                                   canDismiss = false
-                               }
-                           }
-                        )
+                    )
                 }
             }
         }

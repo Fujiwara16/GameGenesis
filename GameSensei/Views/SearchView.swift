@@ -16,7 +16,7 @@ struct SearchView: View {
             NavigationView{
                 ZStack{
                     LinearGradient(colors: [searchedViewModel.topColor,searchedViewModel.bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
-                    ScrollView{
+                    ScrollView(.vertical) {
                         TextField("example text", text: $searchedViewModel.searchText)
                             .frame(width: proxy.size.width-60,height: 15)
                             .padding(.all,14)
@@ -35,7 +35,7 @@ struct SearchView: View {
                                 }
                             }
                         
-                        ScrollView(.vertical,showsIndicators: false) {
+                      
                             LazyVStack(spacing:10) {
                                 ForEach(searchedViewModel.searchedGames){ item in
                                     VStack(spacing:20){
@@ -72,8 +72,20 @@ struct SearchView: View {
                                        
                                 }
                             }
-                        }.frame(width:proxy.size.width-10)
-                    }
+                        
+                    }.frame(width:proxy.size.width-10)
+                        .refreshable {
+                            Task{
+                                do{
+                                try await searchedViewModel.fetchSearchedGame()
+                            }
+                                catch{
+                                    print(error)
+                                }
+                                
+                            }
+                        }
+                    
                 }
                     .navigationTitle(Text("Search"))
                     .onAppear{
