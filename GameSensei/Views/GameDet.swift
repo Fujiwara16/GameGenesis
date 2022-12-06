@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import AVKit
 struct GameDet: View {
     var topColor:Color = .black
     var bottomColor:Color = .purple
@@ -59,11 +59,18 @@ struct GameDet: View {
                             Tag(arr: gameListModel.selectedGame.tags,type: "Tags", width: proxy.size.width)
                             Publishers(arr: gameListModel.selectedGame.publisher,type: "Publishers", width: proxy.size.width)
                             Description(selectedGame:gameListModel.selectedGame,type:"Description",width:proxy.size.width)
-                        GenresData(arr: gameListModel.selectedGame.genre,type: "Genres", width: proxy.size.width)
+                            if(!gameListModel.selectedVideo.url.isEmpty)
+                            {
+                                VideoPlayer(player: AVPlayer(url:  URL(string: gameListModel.selectedVideo.url)!))
+                                    .frame(width: proxy.size.width-50, height: 200)
+                                    .cornerRadius(10)
+                                
+                            }
+                            GenresData(arr: gameListModel.selectedGame.genre,type: "Genres", width: proxy.size.width)
                             
-                        StoreStack(arr: gameListModel.selectedGame.stores,type: "Stores", width: proxy.size.width)
-                           
-                        PlatformStack(arr: gameListModel.selectedGame.platforms,type: "Platforms", width: proxy.size.width)
+                            StoreStack(arr: gameListModel.selectedGame.stores,type: "Stores", width: proxy.size.width)
+                        
+                            PlatformStack(arr: gameListModel.selectedGame.platforms,type: "Platforms", width: proxy.size.width)
                             
                             }.frame(width:proxy.size.width-40,alignment: .center)
                                 .padding(.all,10)
@@ -335,4 +342,31 @@ struct Publishers:View{
         }.frame(width:width-40,alignment: .leading)
             .padding(.bottom,10).opacity(arr.isEmpty ? 0 : 1)
     }
+}
+struct Videos:View{
+    var arr:Array<Video>
+    var type:String
+    var width:CGFloat
+    var body:some View{
+        VStack(alignment:.leading){
+            Text(type)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+            
+            
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack(alignment: .center, spacing: 10) {
+                    ForEach(arr){ item in
+                        
+                        
+                    }
+                }
+                
+            }
+            
+        }.frame(width:width-40,alignment: .leading)
+            .padding(.bottom,10).opacity(arr.isEmpty ? 0 : 1)
+    }
+    
 }

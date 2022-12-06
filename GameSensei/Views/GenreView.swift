@@ -12,7 +12,7 @@ struct GenreView: View {
     @State  var errorMessage = ""
     var topColor:Color = .black
     var bottomColor:Color = .purple
-    var page:Int = 1
+    
     var body:some View{
         NavigationView{
             ZStack{
@@ -43,7 +43,8 @@ struct GenreView: View {
         }
         .task{
             do{
-                try await gameListModel.fetchGameList(page:page)
+                gameListModel.page = Int.random(in: 1...40)
+                try await gameListModel.fetchGameList(page:gameListModel.page)
             }
             catch{
                 errorMessage = error.localizedDescription

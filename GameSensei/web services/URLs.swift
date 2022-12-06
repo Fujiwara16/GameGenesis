@@ -53,8 +53,22 @@ extension URL {
         ]
         return URL(string: components.string!)!
     }
+    
+    static func finalVideoUrl(id:String)->URL{
+        let url = URL(
+            string: "/api/games/\(id)/movies",
+            relativeTo: URL.default
+        )!
+        var components = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: true
+        )!
+        components.queryItems = [
+            URLQueryItem(name: "key", value: URL.apikey)
+        ]
+        return URL(string: components.string!)!
+    }
     static func finalImageUrl(imageurl:String)->URL{
-        print(imageurl)
         guard let url = URL(
             string: imageurl
         ) else { return URL(string:"https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg")!}

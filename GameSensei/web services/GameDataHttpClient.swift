@@ -20,7 +20,7 @@ enum NetworkError: Error{
 class GameDataHttpClient{
     func getGameList(url:URL)async throws->[InitialGameDetails]{
         let (data,response) = try await URLSession.shared.data(from: url)
-        
+        print(url)
         guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
             throw NetworkError.invalidResponse
         }
@@ -37,6 +37,21 @@ class GameDataHttpClient{
         
         return gameData
     }
+    func getVideoUrl(videoFetchUrl:URL)async throws->Video{
+        let (data,response) = try await URLSession.shared.data(from: videoFetchUrl)
+        guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
+            throw NetworkError.invalidResponse
+        }
+        var video:Array<Video> = []
+        guard let jsonData = try? JSON(data: data) else{
+            throw NetworkError.decodingError
+        }
+        for dat in jsonData["results"] {
+            video.append(Video(name:dat.1["name"].stringValue,url:dat.1["data"]["max"].stringValue))
+        }
+        if(video.isEmpty) {return mockVideoData()}
+        else {return video[0]}
+    }
     
     func getGameDetails(url:URL)async throws->GameData{
         let (data,response) = try await URLSession.shared.data(from: url)
@@ -44,6 +59,7 @@ class GameDataHttpClient{
         guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
             throw NetworkError.invalidResponse
         }
+       
         
         guard let jsonData = try? JSON(data: data) else{
             throw NetworkError.decodingError
@@ -77,6 +93,8 @@ class GameDataHttpClient{
         
         return gameData
     }
+    
+    
     
 
 }

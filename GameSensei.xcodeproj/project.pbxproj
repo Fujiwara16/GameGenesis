@@ -22,7 +22,6 @@
 		E8206DA42938CCA3000F9D5E /* GameDataHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206DA32938CCA3000F9D5E /* GameDataHttpClient.swift */; };
 		E8206DA62938CD05000F9D5E /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206DA52938CD05000F9D5E /* URLs.swift */; };
 		E8206DA92938CDDB000F9D5E /* GameListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206DA82938CDDB000F9D5E /* GameListModel.swift */; };
-		E8C95E9F293D065E00BEBE03 /* GameDetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C95E9E293D065E00BEBE03 /* GameDetViewModel.swift */; };
 		E8C95EA3293DCC2000BEBE03 /* GenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C95EA2293DCC2000BEBE03 /* GenreView.swift */; };
 		E8C95EA5293DCD5B00BEBE03 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C95EA4293DCD5B00BEBE03 /* SearchView.swift */; };
 		E8C95EA7293DF77300BEBE03 /* searchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C95EA6293DF77300BEBE03 /* searchViewModel.swift */; };
@@ -70,7 +69,6 @@
 		E8206DA32938CCA3000F9D5E /* GameDataHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDataHttpClient.swift; sourceTree = "<group>"; };
 		E8206DA52938CD05000F9D5E /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
 		E8206DA82938CDDB000F9D5E /* GameListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListModel.swift; sourceTree = "<group>"; };
-		E8C95E9E293D065E00BEBE03 /* GameDetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetViewModel.swift; sourceTree = "<group>"; };
 		E8C95EA2293DCC2000BEBE03 /* GenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreView.swift; sourceTree = "<group>"; };
 		E8C95EA4293DCD5B00BEBE03 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		E8C95EA6293DF77300BEBE03 /* searchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchViewModel.swift; sourceTree = "<group>"; };
@@ -193,7 +191,6 @@
 			isa = PBXGroup;
 			children = (
 				E8206DA82938CDDB000F9D5E /* GameListModel.swift */,
-				E8C95E9E293D065E00BEBE03 /* GameDetViewModel.swift */,
 				E8C95EA6293DF77300BEBE03 /* searchViewModel.swift */,
 			);
 			path = models;
@@ -477,7 +474,6 @@
 				E8206D722938C10D000F9D5E /* GameSenseiApp.swift in Sources */,
 				E8206D9C2938C3CE000F9D5E /* SnapCarousel.swift in Sources */,
 				E8E8E109293A102300334EE9 /* GameDet.swift in Sources */,
-				E8C95E9F293D065E00BEBE03 /* GameDetViewModel.swift in Sources */,
 				E8C95EA5293DCD5B00BEBE03 /* SearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

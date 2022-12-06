@@ -29,13 +29,14 @@ class GameListModel: ObservableObject {
     @Published var card:Array<InitialGameDetails> = []
     @Published var family:Array<InitialGameDetails> = []
     @Published var selectedGame:GameData = mockData()
-    @Published var selectedTag:String = "genreView"
+    @Published var selectedTag:String = "searchView"
+    @Published var page:Int = Int.random(in: 1...40)
+    @Published var selectedVideo = mockVideoData()
     
     func fetchGameList(page:Int) async throws {
         action = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "action"))
         indie = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "indie"))
         adventure = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "adventure"))
-        rpg = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "rpg"))
         strategy = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "strategy"))
         shooter = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "shooter"))
         casual = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "casual"))
@@ -52,6 +53,7 @@ class GameListModel: ObservableObject {
     }
     
     func fetchGameDetails(id:Int)async throws{
+        selectedVideo = try await client.getVideoUrl(videoFetchUrl: URL.finalVideoUrl(id: "\(id)"))
         selectedGame = try await client.getGameDetails(url: URL.finalDetURL(id: "\(id)"))
     }
     
