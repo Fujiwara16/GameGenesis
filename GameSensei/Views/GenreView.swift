@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GenreView: View {
-    @StateObject var gameListModel:GameListModel
+    @EnvironmentObject private var gameListModel:GameListModel
     @State  var errorMessage = ""
     var topColor:Color = .black
     var bottomColor:Color = .purple
@@ -35,12 +35,11 @@ struct GenreView: View {
                             GenreStack(arr:gameListModel.card,genre: "Card")
                             GenreStack(arr:gameListModel.family,genre: "Family")
                         }
-                        
                     }
+                }
             }
-            }
-                .navigationTitle(Text("Games"))
-        }
+                .navigationTitle(Text("Genres"))
+        }.environmentObject(GameListModel())
         .task{
             do{
                 gameListModel.page = Int.random(in: 1...40)
@@ -57,7 +56,9 @@ struct GenreView: View {
 
 struct GenreView_Previews: PreviewProvider {
     static var previews: some View {
-        GenreView(gameListModel: GameListModel())
+        GenreView()
+        
+            .environmentObject(GameListModel())
     }
 }
 
@@ -81,6 +82,7 @@ var body: some View {
 }
 
 struct GenreStack: View{
+    @EnvironmentObject var gameListModel:GameListModel
      var arr:Array<InitialGameDetails>
      var genre:String
     @State private var selectedGame:InitialGameDetails?
@@ -109,8 +111,10 @@ struct GenreStack: View{
                                                 .shadow(radius: 20)
                                         case .failure(_):
                                             ProgressView().foregroundColor(.white)
+                                                .frame(width:proxy.size.width - 150,height: 200)
                                         case .empty:
                                             ProgressView().foregroundColor(.white)
+                                                .frame(width:proxy.size.width - 150,height: 200)
                                         @unknown default:
                                             fatalError()
                                         }
@@ -129,8 +133,12 @@ struct GenreStack: View{
                 }.frame(height:250)
             }
         }.frame(height: 260)
-            .sheet(item: $selectedGame){selectedGame in
+            .sheet(item: $selectedGame,onDismiss: didDismiss){selectedGame in
                 GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
+                    .environmentObject(GameListModel())
             }
+    }
+    func didDismiss() {
+        gameListModel.model?.pause()
     }
 }

@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct GameSenseiApp: App {
+    @StateObject var launchScreenState = LaunchViewModel()
     var body: some Scene {
         WindowGroup {
-            MainPageView()
+            ZStack{
+                MainPageView()
+                if launchScreenState.state != .finished {
+                        launchView()
+                }
+            }.environmentObject(LaunchViewModel())
         }
     }
 }

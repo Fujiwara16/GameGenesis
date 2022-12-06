@@ -7,6 +7,7 @@
 
 
 import Foundation
+import AVKit
 @MainActor
 class GameListModel: ObservableObject {
     let client = GameDataHttpClient()
@@ -29,10 +30,11 @@ class GameListModel: ObservableObject {
     @Published var card:Array<InitialGameDetails> = []
     @Published var family:Array<InitialGameDetails> = []
     @Published var selectedGame:GameData = mockData()
-    @Published var selectedTag:String = "searchView"
+    @Published var selectedTag:String = "gotyView"
     @Published var page:Int = Int.random(in: 1...40)
     @Published var selectedVideo = mockVideoData()
-    
+    @Published var videoUrl:URL?
+    @Published var model:AVPlayer?
     func fetchGameList(page:Int) async throws {
         action = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "action"))
         indie = try await client.getGameList(url:URL.finalListUrl(page:page,genre: "indie"))
@@ -53,8 +55,12 @@ class GameListModel: ObservableObject {
     }
     
     func fetchGameDetails(id:Int)async throws{
-        selectedVideo = try await client.getVideoUrl(videoFetchUrl: URL.finalVideoUrl(id: "\(id)"))
+//        selectedVideo = try await client.getVideoUrl(videoFetchUrl: URL.finalVideoUrl(id: "\(id)"))\
         selectedGame = try await client.getGameDetails(url: URL.finalDetURL(id: "\(id)"))
+        videoUrl = URL(string: selectedGame.videoUrl)
+        if(!selectedGame.videoUrl.isEmpty){
+            model = AVPlayer(url: videoUrl!)
+        }
     }
     
 }

@@ -10,6 +10,11 @@
 		8F51479550CD6FDC7945D2AC /* Pods_GameSensei.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382AD2D2D2A0A4DDAB821EC0 /* Pods_GameSensei.framework */; };
 		CA06B4913BF08D079EE03BED /* Pods_GameSenseiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF79D10BDBED7A1B30078E01 /* Pods_GameSenseiTests.framework */; };
 		D1ADDA6EEBB5D29E7C90307D /* Pods_GameSensei_GameSenseiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E37D9EC9D80C7B14FD88BC63 /* Pods_GameSensei_GameSenseiUITests.framework */; };
+		E81C10A6293F377B002929DC /* launchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81C10A5293F377B002929DC /* launchScreenViewModel.swift */; };
+		E81C10A8293F3792002929DC /* launchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81C10A7293F3792002929DC /* launchView.swift */; };
+		E81C10AA293F4C47002929DC /* GOTYView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81C10A9293F4C47002929DC /* GOTYView.swift */; };
+		E81C10AC293F4C59002929DC /* GOTYViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81C10AB293F4C59002929DC /* GOTYViewModel.swift */; };
+		E81C10AE293F6330002929DC /* avPlayerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81C10AD293F6330002929DC /* avPlayerStatus.swift */; };
 		E8206D722938C10D000F9D5E /* GameSenseiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206D712938C10D000F9D5E /* GameSenseiApp.swift */; };
 		E8206D742938C10D000F9D5E /* MainPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8206D732938C10D000F9D5E /* MainPageView.swift */; };
 		E8206D762938C10F000F9D5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8206D752938C10F000F9D5E /* Assets.xcassets */; };
@@ -54,6 +59,11 @@
 		ADB506C743132DD966FFB0DD /* Pods-GameSensei-GameSenseiUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GameSensei-GameSenseiUITests.debug.xcconfig"; path = "Target Support Files/Pods-GameSensei-GameSenseiUITests/Pods-GameSensei-GameSenseiUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		BF79D10BDBED7A1B30078E01 /* Pods_GameSenseiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GameSenseiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E37D9EC9D80C7B14FD88BC63 /* Pods_GameSensei_GameSenseiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GameSensei_GameSenseiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E81C10A5293F377B002929DC /* launchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = launchScreenViewModel.swift; sourceTree = "<group>"; };
+		E81C10A7293F3792002929DC /* launchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = launchView.swift; sourceTree = "<group>"; };
+		E81C10A9293F4C47002929DC /* GOTYView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GOTYView.swift; sourceTree = "<group>"; };
+		E81C10AB293F4C59002929DC /* GOTYViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GOTYViewModel.swift; sourceTree = "<group>"; };
+		E81C10AD293F6330002929DC /* avPlayerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avPlayerStatus.swift; sourceTree = "<group>"; };
 		E8206D6E2938C10D000F9D5E /* GameSensei.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameSensei.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8206D712938C10D000F9D5E /* GameSenseiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSenseiApp.swift; sourceTree = "<group>"; };
 		E8206D732938C10D000F9D5E /* MainPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageView.swift; sourceTree = "<group>"; };
@@ -192,6 +202,8 @@
 			children = (
 				E8206DA82938CDDB000F9D5E /* GameListModel.swift */,
 				E8C95EA6293DF77300BEBE03 /* searchViewModel.swift */,
+				E81C10A5293F377B002929DC /* launchScreenViewModel.swift */,
+				E81C10AB293F4C59002929DC /* GOTYViewModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -204,6 +216,8 @@
 				E8E8E108293A102300334EE9 /* GameDet.swift */,
 				E8C95EA2293DCC2000BEBE03 /* GenreView.swift */,
 				E8C95EA4293DCD5B00BEBE03 /* SearchView.swift */,
+				E81C10A7293F3792002929DC /* launchView.swift */,
+				E81C10A9293F4C47002929DC /* GOTYView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -212,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				E8206DA02938C8D3000F9D5E /* GameDataClass.swift */,
+				E81C10AD293F6330002929DC /* avPlayerStatus.swift */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
@@ -465,6 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8206DA12938C8D3000F9D5E /* GameDataClass.swift in Sources */,
+				E81C10A6293F377B002929DC /* launchScreenViewModel.swift in Sources */,
 				E8206DA92938CDDB000F9D5E /* GameListModel.swift in Sources */,
 				E8206DA62938CD05000F9D5E /* URLs.swift in Sources */,
 				E8206DA42938CCA3000F9D5E /* GameDataHttpClient.swift in Sources */,
@@ -472,9 +488,13 @@
 				E8206D742938C10D000F9D5E /* MainPageView.swift in Sources */,
 				E8C95EA7293DF77300BEBE03 /* searchViewModel.swift in Sources */,
 				E8206D722938C10D000F9D5E /* GameSenseiApp.swift in Sources */,
+				E81C10AC293F4C59002929DC /* GOTYViewModel.swift in Sources */,
 				E8206D9C2938C3CE000F9D5E /* SnapCarousel.swift in Sources */,
+				E81C10A8293F3792002929DC /* launchView.swift in Sources */,
 				E8E8E109293A102300334EE9 /* GameDet.swift in Sources */,
 				E8C95EA5293DCD5B00BEBE03 /* SearchView.swift in Sources */,
+				E81C10AE293F6330002929DC /* avPlayerStatus.swift in Sources */,
+				E81C10AA293F4C47002929DC /* GOTYView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

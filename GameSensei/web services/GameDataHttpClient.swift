@@ -20,7 +20,7 @@ enum NetworkError: Error{
 class GameDataHttpClient{
     func getGameList(url:URL)async throws->[InitialGameDetails]{
         let (data,response) = try await URLSession.shared.data(from: url)
-        print(url)
+        
         guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
             throw NetworkError.invalidResponse
         }
@@ -55,7 +55,7 @@ class GameDataHttpClient{
     
     func getGameDetails(url:URL)async throws->GameData{
         let (data,response) = try await URLSession.shared.data(from: url)
-        print(url)
+        
         guard let httpResponse = response as? HTTPURLResponse,httpResponse.statusCode == 200 else{
             throw NetworkError.invalidResponse
         }
@@ -71,6 +71,7 @@ class GameDataHttpClient{
         var genre:Array<Genres> = []
         var stores:Array<Store> = []
         var tags:Array<Tags> = []
+        var videoUrl:String = ""
         var publisher:Array<Publisher> = []
         for result in jsonData["tags"]{
             tags.append(Tags(tags: result.1["name"].stringValue))
@@ -88,8 +89,9 @@ class GameDataHttpClient{
             platforms.append(Platforms(name: result.1["platform"]["name"].stringValue, image_background: result.1["platform"]["image_background"].stringValue, minimum: result.1["requirements"]["minimum"].stringValue, recommended:  result.1["requirements"]["recommended"].stringValue))
                 
         }
-           
-        gameData = GameData(id: jsonData["id"].intValue, name: jsonData["name"].stringValue, background_image: jsonData["background_image"].stringValue, released: jsonData["released"].stringValue, rating: jsonData["rating"].doubleValue,description:jsonData["description_raw"].stringValue,platforms: platforms,genre: genre,stores: stores,tags:tags,publisher:publisher)
+        videoUrl = jsonData["clip"]["clip"].stringValue
+    
+        gameData = GameData(id: jsonData["id"].intValue, name: jsonData["name"].stringValue, background_image: jsonData["background_image"].stringValue, released: jsonData["released"].stringValue, rating: jsonData["rating"].doubleValue,description:jsonData["description_raw"].stringValue,platforms: platforms,genre: genre,stores: stores,tags:tags,publisher:publisher,videoUrl: videoUrl)
         
         return gameData
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
     @StateObject private var searchedViewModel = SearchViewModel()
-
+    @EnvironmentObject var gameListModel:GameListModel
     var body: some View {
         
         GeometryReader{proxy in
@@ -17,8 +17,8 @@ struct SearchView: View {
                 ZStack{
                     LinearGradient(colors: [searchedViewModel.topColor,searchedViewModel.bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
                     ScrollView{
-                        TextField("ex: Grand Theft Auto", text: $searchedViewModel.searchText)
-                            .frame(width: proxy.size.width-60)
+                        TextField("example text", text: $searchedViewModel.searchText)
+                            .frame(width: proxy.size.width-60,height: 15)
                             .padding(.all,14)
                             .foregroundColor(.black)
                             .background(RoundedRectangle(cornerRadius: 20).fill(Color.white))
@@ -91,15 +91,21 @@ struct SearchView: View {
                     }
                    
             }
-            .sheet(item: $searchedViewModel.selectedGame){selectedGame in
+            .sheet(item: $searchedViewModel.selectedGame,onDismiss: didDismiss){selectedGame in
                 GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
+                    .environmentObject(GameListModel())
             }
         }
+    }
+    func didDismiss() {
+
+        gameListModel.model?.pause()
     }
 }
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
         SearchView()
+            .environmentObject(GameListModel())
     }
 }

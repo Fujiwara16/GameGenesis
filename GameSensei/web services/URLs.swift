@@ -15,7 +15,7 @@ extension URL {
         URL(string: "https://api.rawg.io")!
         
     }
-    static var apikey = "ed284fdf38a6490cbb346ed3bc64019a"
+    static var apikey = "c542e67aec3a4340908f9de9e86038af"
     static var `default`:URL{
         #if DEBUG
         return development
@@ -39,6 +39,19 @@ extension URL {
         ]
         return URL(string: components.string!)!
     }
+    static func finalBestOfYearUrl(page:Int)->URL{
+        
+        let url = URL(string: "/api/games/lists/greatest", relativeTo:URL.default)!
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+        components?.queryItems = [
+            URLQueryItem(name: "discover", value: "true"),
+            URLQueryItem(name: "ordering", value: "-added"),
+            URLQueryItem(name: "page_size", value: "\(page)"),
+            URLQueryItem(name: "key", value: URL.apikey)
+        ]
+        return URL(string: (components?.string!)!)!
+    }
+    
     static func finalDetURL(id:String)->URL{
         let url = URL(
             string: "/api/games/\(id)",
@@ -72,7 +85,7 @@ extension URL {
         guard let url = URL(
             string: imageurl
         ) else { return URL(string:"https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg")!}
-        print(url)
+     
         return url
 
     }

@@ -11,8 +11,9 @@ struct GameDet: View {
     var topColor:Color = .black
     var bottomColor:Color = .purple
     var imageurl:String
+    @State private var canDismiss = true
     @State private var errorMessage = ""
-    @StateObject private var gameListModel:GameListModel = GameListModel()
+    @EnvironmentObject private var gameListModel:GameListModel
     var id:Int
     var body: some View {
         GeometryReader{ proxy in
@@ -59,11 +60,15 @@ struct GameDet: View {
                             Tag(arr: gameListModel.selectedGame.tags,type: "Tags", width: proxy.size.width)
                             Publishers(arr: gameListModel.selectedGame.publisher,type: "Publishers", width: proxy.size.width)
                             Description(selectedGame:gameListModel.selectedGame,type:"Description",width:proxy.size.width)
-                            if(!gameListModel.selectedVideo.url.isEmpty)
+                            if(!gameListModel.selectedGame.videoUrl.isEmpty)
                             {
-                                VideoPlayer(player: AVPlayer(url:  URL(string: gameListModel.selectedVideo.url)!))
+                                VideoPlayer(player: gameListModel.model)
                                     .frame(width: proxy.size.width-50, height: 200)
                                     .cornerRadius(10)
+                                    .onAppear{
+                                        canDismiss = false
+                                    }
+                                
                                 
                             }
                             GenresData(arr: gameListModel.selectedGame.genre,type: "Genres", width: proxy.size.width)
@@ -88,18 +93,52 @@ struct GameDet: View {
                                 errorMessage = error.localizedDescription
                             }
                         }
-                    
+                        .gesture(
+                           DragGesture().onChanged { value in
+
+                               print(canDismiss)
+                               if(gameListModel.selectedGame.videoUrl != "" && gameListModel.model!.isPlaying)
+                                    {
+                                        canDismiss = true
+                                    
+                                    }
+                               else{
+                                   canDismiss = false
+                               }
+                           }
+                        )
                 }
             }
         }
+        .interactiveDismissDisabled(canDismiss)
+        
     }
 }
 
 struct GameDet_Previews: PreviewProvider {
     static var previews: some View {
         GameDet(imageurl: "https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg", id: 3498)
+            .environmentObject(GameListModel())
     }
 }
+//struct AVPlayerView: UIViewControllerRepresentable {
+//    @EnvironmentObject private var gameListModel:GameListModel
+//    var videoURL: URL?
+//
+//    private var player: AVPlayer {
+//        return AVPlayer(url: videoURL!)
+//    }
+//
+//    func updateUIViewController(_ playerController: AVPlayerViewController, context: Context) {
+//        playerController.modalPresentationStyle = .fullScreen
+//        playerController.player = player
+//        gameListModel.canBeDismissed = true
+//    }
+//
+//    func makeUIViewController(context: Context) -> AVPlayerViewController {
+//        return AVPlayerViewController()
+//    }
+//}
 struct Description:View{
     var selectedGame:GameData
     var type:String
