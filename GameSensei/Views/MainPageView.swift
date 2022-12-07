@@ -36,7 +36,7 @@ struct MainPageView: View {
                     .tag("genreView")
                 SearchView()
                     .tag("searchView")
-            }.environmentObject(GameListModel())
+            }.environmentObject(gameListModel)
             HStack(spacing:30){
                 Image(systemName: "star")
                     .resizable()

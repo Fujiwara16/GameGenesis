@@ -15,7 +15,8 @@ struct GOTYView: View {
             proxy in
             NavigationView{
                 ZStack{
-                    LinearGradient(colors: [gotyViewModel.topColor,gotyViewModel.bottomColor], startPoint: .top, endPoint: .bottom)
+//                    LinearGradient(colors: [gotyViewModel.topColor,gotyViewModel.bottomColor], startPoint: .top, endPoint: .bottom)
+                    Color.black
                         .ignoresSafeArea(.all)
                     GridView(width: proxy.size.width, gotyViewModel:gotyViewModel,arr:gotyViewModel.gotyList)
                        
@@ -29,7 +30,7 @@ struct GOTYView: View {
                     }
                 }
                 
-            }.environmentObject(GameListModel())
+            }.environmentObject(gameListModel)
         }
     }
 }
@@ -55,34 +56,53 @@ struct GridView:View{
         ScrollView(.vertical){
            LazyVGrid(columns: columns,spacing: 40){
                ForEach(arr) { item in
-                   VStack{
-                           AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image)) { phase in
-                               switch phase {
-                               case .success(let image):
-                                   image
-                                       .resizable()
-                                       .frame(width:160,height: 130)
-                                       .aspectRatio(contentMode: .fill)
-                                       .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
-                                       .shadow(radius: 20)
-                               case .failure(_):
-                                   ProgressView().foregroundColor(.white)
-                                       .frame(width:160,height: 130)
-                               case .empty:
-                                   ProgressView().foregroundColor(.white)
-                                       .frame(width:160,height: 130)
-                               @unknown default:
-                                   fatalError()
+                
+                   
+                   
+                   AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image), transaction: Transaction(animation: .spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0.25))) { phase in
+                       VStack{
+                           switch phase {
+                           case .success(let image):
+                               image
+                                   .resizable()
+                                   .frame(width:160,height: 130)
+                                   .aspectRatio(contentMode: .fill)
+                                   .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                   .shadow(radius: 20)
+                                   .transition(.opacity)
+                                   .transition(.scale)
+                           case .failure(_):
+                               Color("translucent")
+                                   .frame(width:160,height: 130)
+                                   .aspectRatio(contentMode: .fill)
+                               
+                                   .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                           case .empty:
+                               Color("translucent")
+                                   .frame(width:160,height: 130)
+                                   .aspectRatio(contentMode: .fill)
+                               
+                                   .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                           @unknown default:
+                               fatalError()
+                           }
+                           Text(item.name)
+                               .font(.subheadline)
+                               .fontWeight(.bold)
+                               .foregroundColor(.white)
+                           
+                       }
+                   }.frame(width:150)
+                   
+                       .onTapGesture {
+                           Task{
+                               do{
+                                   try await gameListModel.fetchGameDetails(id: item.id)
+                               }
+                               catch{
+                                   return
                                }
                            }
-                       Text(item.name)
-                           .font(.subheadline)
-                           .lineLimit(1)
-                           .fontWeight(.bold)
-                           .foregroundColor(.white)
-                       
-                   }.frame(width:150)
-                       .onTapGesture {
                            selectedGame = item
                        }
                }
@@ -102,7 +122,7 @@ struct GridView:View{
         
         .sheet(item: $selectedGame,onDismiss: didDismiss){selectedGame in
             GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
-                .environmentObject(GameListModel())
+                .environmentObject(gameListModel)
         }
     }
     func didDismiss() {

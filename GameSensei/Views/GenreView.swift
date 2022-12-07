@@ -16,7 +16,9 @@ struct GenreView: View {
     var body:some View{
         NavigationView{
             ZStack{
-                LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
+//                LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
+                Color.black
+                    .ignoresSafeArea(.all)
                 ScrollView{
                     
                     VStack(spacing:40){
@@ -53,10 +55,10 @@ struct GenreView: View {
                 }
             } .navigationTitle(Text("Genres"))
                 
-        }.environmentObject(GameListModel())
+        }.environmentObject(gameListModel)
         .task{
             do{
-                gameListModel.page = Int.random(in: 1...40)
+//                gameListModel.page = Int.random(in: 1...40)
                 try await gameListModel.fetchGameList(page:gameListModel.page)
             }
             catch{
@@ -113,33 +115,50 @@ struct GenreStack: View{
                 ScrollView(.horizontal,showsIndicators: false) {
                     LazyHStack(spacing:10) {
                         ForEach(arr){ item in
-                            VStack{
-                                    AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image)) { phase in
-                                        switch phase {
-                                        case .success(let image):
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(width:proxy.size.width - 150,height: 200)
-                                                .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
-                                                .shadow(radius: 20)
-                                        case .failure(_):
-                                            ProgressView().foregroundColor(.white)
-                                                .frame(width:proxy.size.width - 150,height: 200)
-                                        case .empty:
-                                            ProgressView().foregroundColor(.white)
-                                                .frame(width:proxy.size.width - 150,height: 200)
-                                        @unknown default:
-                                            fatalError()
+
+                                    AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image), transaction: Transaction(animation: .spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0.25))) { phase in
+                                        VStack{
+                                            switch phase {
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .frame(width:proxy.size.width - 150,height: 200)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                                    .shadow(radius: 20)
+                                                    .transition(.opacity)
+                                                    .transition(.scale)
+                                            case .failure(_):
+                                                Color("translucent")
+                                                    .frame(width:proxy.size.width - 150,height: 200)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                            case .empty:
+                                                Color("translucent")
+                                                    .frame(width:proxy.size.width - 150,height: 200)
+                                                    .aspectRatio(contentMode: .fill)
+                                                
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                            @unknown default:
+                                                fatalError()
+                                            }
+                                            Text(item.name)
+                                                .font(.subheadline)
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.white)
+                                            
+                                        }
+                                    }.frame(width:proxy.size.width - 130)
+                            
+                                .onTapGesture {
+                                    Task{
+                                        do{
+                                            try await gameListModel.fetchGameDetails(id: item.id)
+                                        }
+                                        catch{
+                                            return
                                         }
                                     }
-                                Text(item.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                
-                            }.frame(width:proxy.size.width - 130)
-                                .onTapGesture {
                                     selectedGame = item
                                 }
                         }
@@ -149,7 +168,7 @@ struct GenreStack: View{
         }.frame(height: 260)
             .sheet(item: $selectedGame,onDismiss: didDismiss){selectedGame in
                 GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
-                    .environmentObject(GameListModel())
+                    .environmentObject(gameListModel)
             }
     }
     func didDismiss() {

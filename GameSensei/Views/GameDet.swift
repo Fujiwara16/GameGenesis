@@ -13,12 +13,14 @@ struct GameDet: View {
     var imageurl:String
     @State private var canDismiss = false
     @State private var errorMessage = ""
-    @EnvironmentObject private var gameListModel:GameListModel
+    @EnvironmentObject  var gameListModel:GameListModel
     var id:Int
     var body: some View {
         GeometryReader{ proxy in
             ZStack{
-                LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
+//                LinearGradient(colors: [topColor,bottomColor], startPoint: .top, endPoint: .bottom)
+                Color("dark gray")
+                    .edgesIgnoringSafeArea(.all)
                 ScrollView(.vertical){
                     VStack(alignment: .center){
                         Text(gameListModel.selectedGame.name)
@@ -84,14 +86,6 @@ struct GameDet: View {
                                 .opacity(gameListModel.selectedGame.description.isEmpty ? 0 : 1)
                                 .shadow(radius: 10)
                         
-                    }
-                    .task{
-                        do{
-                            try await gameListModel.fetchGameDetails(id: id)
-                        }
-                        catch{
-                            errorMessage = error.localizedDescription
-                        }
                     }
                     .gesture(
                         DragGesture().onChanged { value in

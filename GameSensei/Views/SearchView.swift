@@ -15,7 +15,9 @@ struct SearchView: View {
         GeometryReader{proxy in
             NavigationView{
                 ZStack{
-                    LinearGradient(colors: [searchedViewModel.topColor,searchedViewModel.bottomColor], startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
+//                    LinearGradient(colors: [searchedViewModel.topColor,searchedViewModel.bottomColor], startPoint: .top, endPoint: .bottom)
+                    Color.black
+                        .edgesIgnoringSafeArea(.all)
                     ScrollView(.vertical) {
                         TextField("example text", text: $searchedViewModel.searchText)
                             .frame(width: proxy.size.width-60,height: 15)
@@ -34,37 +36,51 @@ struct SearchView: View {
                                     }
                                 }
                             }
-                        
-                      
                             LazyVStack(spacing:10) {
                                 ForEach(searchedViewModel.searchedGames){ item in
-                                    VStack(spacing:20){
-                                            AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image)) { phase in
-                                                switch phase {
-                                                case .success(let image):
-                                                    image
-                                                        .resizable()
-                                                        .frame(width:proxy.size.width - 60,height: 200)
-                                                        .aspectRatio(contentMode: .fill)
-                                                        .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
-                                                        .shadow(radius: 20)
-                                                case .failure(_):
-                                                    ProgressView().foregroundColor(.white)
-                                                case .empty:
-                                                    ProgressView().foregroundColor(.white)
-                                                @unknown default:
-                                                    fatalError()
-                                                }
+                                   
+                                    AsyncImage(url: URL.finalImageUrl(imageurl: item.background_image), transaction: Transaction(animation: .spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0.25))) { phase in
+                                        VStack{
+                                            switch phase {
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .frame(width:proxy.size.width - 60,height: 200)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                                    .shadow(radius: 20)
+                                                    .transition(.opacity)
+                                                    .transition(.scale)
+                                            case .failure(_):
+                                                Color("translucent")
+                                                    .frame(width:proxy.size.width - 60,height: 200)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                            case .empty:
+                                                Color("translucent")
+                                                    .frame(width:proxy.size.width - 60,height: 200)
+                                                    .aspectRatio(contentMode: .fill)
+                                                
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10.0,style: .continuous))
+                                            @unknown default:
+                                                fatalError()
                                             }
-                                        Text(item.name)
-                                            .font(.subheadline)
-                                            .fontWeight(.bold)
-                                            .lineLimit(1)
-                                            .foregroundColor(.white)
-                                            .padding(.bottom,20)
-                                        
-                                    }
+                                            Text(item.name)
+                                                .font(.subheadline)
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.white)
+                                            
+                                        }
+                                    }.frame(width:proxy.size.width - 130)
                                     .onTapGesture {
+                                        Task{
+                                            do{
+                                                try await gameListModel.fetchGameDetails(id: item.id)
+                                            }
+                                            catch{
+                                                return
+                                            }
+                                        }
                                         searchedViewModel.selectedGame = item
                                     }
                                     
@@ -105,7 +121,7 @@ struct SearchView: View {
             }
             .sheet(item: $searchedViewModel.selectedGame,onDismiss: didDismiss){selectedGame in
                 GameDet(imageurl: selectedGame.background_image, id:selectedGame.id)
-                    .environmentObject(GameListModel())
+                    .environmentObject(gameListModel)
             }
         }
     }
