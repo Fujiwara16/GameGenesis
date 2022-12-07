@@ -1,4 +1,4 @@
-# GameSensei
+# Game Genesis
 
 
 <p align="row">
